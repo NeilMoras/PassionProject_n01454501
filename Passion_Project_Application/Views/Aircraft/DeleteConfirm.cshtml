@@ -1,0 +1,19 @@
+﻿@model Passion_Project_Application.Models.AircraftDto
+@{
+    ViewBag.Title = "DeleteConfirm";
+}
+
+
+<a href="/Aircraft/List">Cancel</a>
+
+<h2>Are you sure you want to delete this aircraft?</h2>
+<p style="color:red">This action cannot be undone</p>
+<h2>@Model.AircraftName</h2>
+<div><span>Aircraft Type:</span> @Model.AircraftType</div>
+<div><span>Engine:</span> @Model.Engine</div>
+<div><span>Fun Facts:</span>@Model.Description</div>
+<div><span>Manufacturer:</span> @Model.CompanyName</div>
+<form action="/Aircraft/Delete/@Model.AircraftID" method="POST">
+    <input type="submit" value="Confirm Delete" />
+
+</form>

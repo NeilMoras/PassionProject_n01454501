@@ -1,0 +1,42 @@
+﻿@model  Passion_Project_Application.Models.ViewModels.DetailsAircraft
+@{
+    ViewBag.Title = "View";
+}
+<a href="/Aircraft/List">Go back to list</a>
+
+<a href="/Aircraft/Edit/@Model.SelectedAircraft.AircraftID">Update</a>
+
+<a class="delete-tag" style="color:#ab2020; float:right" href="/Aircraft/DeleteConfirm/@Model.SelectedAircraft.AircraftID">Delete</a>
+
+
+<h2>@Model.SelectedAircraft.AircraftName</h2>
+<div><span>Year Introduced:</span>@Model.SelectedAircraft.YearIntroduced.ToString("yyyy").</div>
+<div><span>Aircraft Type:</span>@Model.SelectedAircraft.AircraftType</div>
+<div><span>Engine:</span>@Model.SelectedAircraft.Engine</div>
+<div><span>Range:</span>@Model.SelectedAircraft.Range Kms</div>
+<div><span>Max Speed:</span>@Model.SelectedAircraft.MaxSpeed km/hr</div>
+<div><span>Fun Facts:</span>@Model.SelectedAircraft.Description</div>
+<div><span>Manufacturer:</span><a href="/Manufacturer/Details/@Model.SelectedAircraft.ManufacturerID">@Model.SelectedAircraft.CompanyName</a></div>
+
+<div>
+    <h2>Countries Who own and  operate @Model.SelectedAircraft.AircraftName:</h2>
+    @foreach (var country in Model.ResponsibleCountries)
+    {
+    
+        <a href="/Country/Details/@country.CountryID">@country.CountryName</a><a style="color:#ab2020;" href="/Aircraft/Unassociate/@Model.SelectedAircraft.AircraftID?CountryID=@country.CountryID">[x]</a><br />
+    }
+
+    <div>
+        <h4>Add new Country to who owns and operates @Model.SelectedAircraft.AircraftName</h4>
+        <form method="POST" action="/Aircraft/Associate/@Model.SelectedAircraft.AircraftID">
+            <select name="CountryID">
+                @foreach (var country in Model.AvailableCountries)
+                {
+                <option value="@country.CountryID">@country.CountryName</option>
+                }
+
+            </select>
+            <input type="submit" value="Associate Country" />
+        </form>
+    </div>
+</div>

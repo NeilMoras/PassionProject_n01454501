@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+<a href="/Manufacturer/List">Go back to list</a>
+<h2>Create Manufacturer</h2>
+<form action="/Manufacturer/Create" method="POST">
+    <div>
+        <label>Company Name:</label>
+        <input type="text" name="CompanyName" />
+    </div>
+    <div>
+        <label>Country:</label>
+        <input type="text" name="Country" />
+    </div>
+    <div>
+        <label>HeadQuarters:</label>
+        <input type="text" name="HeadQuarters" />
+    </div>
+    <div>
+        <label>Company Description:</label>
+        <textarea name="CompanyDescription"></textarea>
+    </div>
+    <div>
+        <input type="submit" value="Create Manufacturer" />
+
+    </div>
+</form>

@@ -1,0 +1,32 @@
+﻿@model Passion_Project_Application.Models.ManufacturerDto
+@{
+    ViewBag.Title = "Edit";
+}
+<a href="/Manufacturer/Details/@Model.ManufacturerID">Go back</a>
+<h2>Update Manufacturer</h2>
+<form action="/Manufacturer/Update/@Model.ManufacturerID" method="POST">
+    <div style="display:none;">
+
+        <input type="text" name="ManufacturerID" value="@Model.ManufacturerID" />
+    </div>
+    <div>
+        <label>Company Name:</label>
+        <input type="text" name="CompanyName" value="@Model.CompanyName" />
+    </div>
+    <div>
+        <label>Country:</label>
+        <input type="text" name="Country" value="@Model.Country" />
+    </div>
+    <div>
+        <label>HeadQuarters:</label>
+        <input type="text" name="HeadQuarters" value="@Model.HeadQuarters" />
+    </div>
+    <div>
+        <label>Company Description:</label>
+        <textarea name="CompanyDescription">@Model.CompanyDescription</textarea>
+    </div>
+    <div>
+        <input type="submit" value="Update Manufacturer" />
+
+    </div>
+</form>

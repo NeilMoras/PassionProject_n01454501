@@ -1,0 +1,60 @@
+﻿@model Passion_Project_Application.Models.ViewModels.UpdateAircraft
+@{
+    ViewBag.Title = "Edit";
+}
+<a href="/Aircraft/Details/@Model.SelectedAircraft.AircraftID">Go back</a>
+<h2>Update Aircraft</h2>
+<form action="/Aircraft/Update/@Model.SelectedAircraft.AircraftID" method="post">
+    <div style="display:none;">
+      
+        <input type="text" name="AircraftID" value="@Model.SelectedAircraft.AircraftID" />
+    </div>
+    <div>
+        <label>Aircraft Name:</label>
+        <input type="text" name="AircraftName"  value="@Model.SelectedAircraft.AircraftName"/>
+    </div>
+    <div>
+        <label>AircraftType:</label>
+        <input type="text" name="AircraftType" value="@Model.SelectedAircraft.AircraftType" />
+    </div>
+    <div>
+        <label>Year Introduced:</label>
+        <input type="date" name="YearIntroduced" value="@Model.SelectedAircraft.YearIntroduced"/>
+    </div>
+    <div>
+        <label>Max Speed(km/h):</label>
+        <input type="number" name="MaxSpeed" value="@Model.SelectedAircraft.MaxSpeed" />
+    </div>
+    <div>
+        <label>Range(km):</label>
+        <input type="number" name="Range"  value="@Model.SelectedAircraft.Range"/>
+    </div>
+    <div>
+        <label>Engine:</label>
+        <input type="text" name="Engine" value="@Model.SelectedAircraft.Engine" />
+    </div>
+    <div>
+        <label>ManufacturerId:</label>
+        <select name="ManufacturerID">
+            @foreach (var manufacturer in Model.ManufacturerOptions)
+            {
+                string selected = "";
+                if (manufacturer.ManufacturerID == Model.SelectedAircraft.ManufacturerID)
+                {
+                    selected = "selected";
+                }
+                <option value="@manufacturer.ManufacturerID" @selected>@manufacturer.CompanyName</option>
+
+            }
+        </select>
+    </div>
+    <div>
+        <label>Description:</label>
+        <textarea name="Description" >@Model.SelectedAircraft.Description</textarea>
+    </div>
+    <div>
+        <input type="submit" value="Update Aircraft" />
+    </div>
+</form>
+
+

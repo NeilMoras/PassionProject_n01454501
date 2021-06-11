@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Passion_Project_Application.Models.ManufacturerDto>
+
+@{
+    ViewBag.Title = "List";
+}
+
+
+<h2>List</h2>
+<a href="/Manufacturer/New">New Manufacturer</a>
+
+@foreach (var manufacturer in Model)
+{
+    <h2><a href="/Manufacturer/Details/@manufacturer.ManufacturerID">@manufacturer.CompanyName</a></h2>
+
+
+
+}
+

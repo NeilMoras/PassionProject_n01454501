@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Passion_Project_Application.Models.ManufacturerDto>
+@{ 
+         ViewBag.Title = "Create";
+}
+
+
+<a href="/Aircraft/List">Go back to list</a>
+<h2>Add New Aircraft</h2>
+<form action="/Aircraft/Create" method="post">
+    <div>
+        <label>Aircraft Name:</label>
+        <input type="text" name="AircraftName" />
+    </div>
+    <div>
+        <label>AircraftType:</label>
+        <input type="text" name="AircraftType" />
+    </div>
+    <div>
+        <label>Year Introduced:</label>
+        <input type="date" name="YearIntroduced" />
+    </div>
+    <div>
+        <label>Max Speed(km/h):</label>
+        <input type="number" name="MaxSpeed" />
+    </div>
+    <div>
+        <label>Range(km):</label>
+        <input type="number" name="Range" />
+    </div>
+    <div>
+        <label>Engine:</label>
+        <input type="text" name="Engine" />
+    </div>
+    <div>
+        <label>Manufacturer:</label>
+        <select name="ManufacturerID">
+            @foreach (var manufacturer in Model)
+            {
+                <option value="@manufacturer.ManufacturerID">@manufacturer.CompanyName</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label>Description:</label>
+        <textarea name="Description"></textarea>
+    </div>
+    <div>
+        <input type="submit" value="Add Aircraft" />
+    </div>
+</form>

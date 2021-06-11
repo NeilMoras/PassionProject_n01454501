@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Passion_Project_Application.Models.AircraftDto>
+
+@{
+    ViewBag.Title = "List";
+}
+
+
+<h2>List</h2>
+<a href="/Aircraft/New">New Aircraft</a>
+
+@foreach (var aircraft in Model)
+{
+    <h2><a href="/Aircraft/Details/@aircraft.AircraftID">@aircraft.AircraftName</a></h2>
+    
+
+
+}

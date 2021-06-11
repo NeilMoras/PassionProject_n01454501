@@ -1,0 +1,29 @@
+﻿@model Passion_Project_Application.Models.CountryDto
+@{
+    ViewBag.Title = "Edit";
+}
+<a href="/Country/Details/@Model.CountryID">Go back</a>
+<h2>Update Country</h2>
+<form action="/Country/Update/@Model.CountryID" method="POST">
+    <div style="display:none;">
+        @* Pass through the Country ID *@
+        <input type="text" name="CountryID" value="@Model.CountryID" />
+    </div>
+    <div>
+        <label>Country Name:</label>
+        <input type="text" name="CountryName" value="@Model.CountryName" />
+    </div>
+    <div>
+        <label>Airforce Name:</label>
+        <input type="text" name="AirforceName" value="@Model.AirforceName" />
+    </div>
+    <div>
+        <label>Country Description:</label>
+        <textarea name="CountryDescription">@Model.CountryDescription</textarea>
+    </div>
+    <div>
+        <input type="submit" value="Update Country" />
+
+    </div>
+</form>
+

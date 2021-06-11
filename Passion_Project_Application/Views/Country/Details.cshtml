@@ -1,0 +1,22 @@
+﻿@model Passion_Project_Application.Models.ViewModels.DetailsCountry
+@{
+    ViewBag.Title = "Details";
+}
+<a href="/Country/List">Go back to list</a>
+
+<a href="/Country/Edit/@Model.SelectedCountry.CountryID">Update</a>
+
+<a style="color:#ab2020;" href="/Country/DeleteConfirm/@Model.SelectedCountry.CountryID">Delete</a>
+
+<h2>@Model.SelectedCountry.CountryName</h2>
+<div>AirForce Name: @Model.SelectedCountry.AirforceName</div>
+<div>Country Description :@Model.SelectedCountry.CountryDescription</div>
+
+<div>
+    <h3>Aircrafts Operated:</h3>
+    @foreach (var aircraft in Model.KeptAircrafts)
+    {
+        <a href="/Aircraft/Details/@aircraft.AircraftID">@aircraft.AircraftName</a><br />
+
+    }
+</div>

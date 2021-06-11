@@ -1,0 +1,16 @@
+﻿@model IEnumerable<Passion_Project_Application.Models.CountryDto>
+
+@{
+    ViewBag.Title = "List";
+}
+
+
+<h2>List</h2>
+<a href="/Country/New">New Country</a>
+@foreach (var country in Model)
+{
+    <h2><a href="/Country/Details/@country.CountryID\">@country.CountryName</a></h2>
+
+
+
+}

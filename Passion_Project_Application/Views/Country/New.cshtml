@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+<a href="/Country/List">Go back to list</a>
+<h2>Create Country</h2>
+
+<form action="/Country/Create" method="POST">
+    <div>
+        <label>Country Name:</label>
+        <input type="text" name="CountryName" />
+    </div>
+    <div>
+        <label>Airforce Name:</label>
+        <input type="text" name="AirforceName" />
+    </div>
+    <div>
+        <label>Country Description:</label>
+        <textarea name="CountryDescription"></textarea>
+    </div>
+    <div>
+        <input type="submit" value="Create Country" />
+
+    </div>
+</form>
