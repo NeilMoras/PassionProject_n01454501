@@ -27,7 +27,7 @@
     }
 
     <div>
-        <h4>Add new Country who owns and operates @Model.SelectedAircraft.AircraftName</h4>
+        <h4>Add new Country who own and operates @Model.SelectedAircraft.AircraftName</h4>
         <form method="POST" action="/Aircraft/Associate/@Model.SelectedAircraft.AircraftID">
             <select name="CountryID">
                 @foreach (var country in Model.AvailableCountries)
