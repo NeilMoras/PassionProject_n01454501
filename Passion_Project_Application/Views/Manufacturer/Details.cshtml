@@ -2,11 +2,12 @@
 @{
     ViewBag.Title = "View";
 }
+
 <a href="/Manufacturer/List">Go back to list</a>
 
 <a href="/Manufacturer/Edit/@Model.SelectedManufacturer.ManufacturerID">Update</a>
 
-<a style="color:#ab2020;" href="/Manufacturer/DeleteConfirm/@Model.SelectedManufacturer.ManufacturerID">Delete</a>
+<a class="delete-tag" href="/Manufacturer/DeleteConfirm/@Model.SelectedManufacturer.ManufacturerID">Delete</a>
 
 
 <h2>@Model.SelectedManufacturer.CompanyName</h2>

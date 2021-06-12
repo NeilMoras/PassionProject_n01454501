@@ -43,7 +43,7 @@ namespace Passion_Project_Application.Controllers
         {
             DetailsAircraft ViewModel = new DetailsAircraft();
 
-            //Objective : communicate without our aircraft data api to retrive a one aircrafts
+            //Objective : communicate without our aircraft data api to retrive  one aircraft
             //curl https://localhost:44384/api/aircraftdata/findaircraft/{id}
 
            
@@ -163,7 +163,7 @@ namespace Passion_Project_Application.Controllers
             AircraftDto SelectedAircraft = response.Content.ReadAsAsync<AircraftDto>().Result;
             ViewModel.SelectedAircraft = SelectedAircraft;
 
-            // all Manufacturers to choose from when updating this aircraft
+            // all Manufacturers to choose from  a dropdown list when updating this aircraft
             //the existing aircraft information
             url = "manufacturerdata/listmanufacturers/";
             response = client.GetAsync(url).Result;

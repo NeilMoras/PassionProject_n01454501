@@ -31,3 +31,8 @@ label{
 span{
     font-weight:bold;
 }
+
+.delete-tag {
+  color:#ab2020; 
+  float:right;
+}

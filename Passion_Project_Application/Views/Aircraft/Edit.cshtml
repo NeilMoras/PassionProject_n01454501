@@ -19,7 +19,7 @@
     </div>
     <div>
         <label>Year Introduced:</label>
-        <input type="date" name="YearIntroduced" value="@Model.SelectedAircraft.YearIntroduced"/>
+        <input type="date" name="YearIntroduced" value="@Model.SelectedAircraft.YearIntroduced"/><span>@Model.SelectedAircraft.YearIntroduced.ToString("yyyy/mm/dd")</span>
     </div>
     <div>
         <label>Max Speed(km/h):</label>

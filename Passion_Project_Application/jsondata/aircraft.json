@@ -1,4 +1,12 @@
 ﻿{
-   
+  "AircraftID": 3,
+  "AircraftName": "F-22 Raptor",
+  "AircraftType": "Fighter Jet",
+  "YearIntroduced": "2005-12-01 00:00:00",
+  "MaxSpeed": 45,
+  "Range": 2960,
+  "Engine": "Pratt & Whitney F119",
+  "Manufacturer": "Lockheed Martin",
+  "Description": "The Lockheed Martin F-22 Raptor is an American single-seat, twin-engine, all-weather stealth tactical fighter aircraft developed exclusively for the United States Air Force"
 
 }
