@@ -5,8 +5,9 @@
 
 ## Extra Features added apart from the case CRUD 
 - [x] Images to each Aircraft and Manufacturer logo
-- [x] Authorization inorder for only admin user tp create ,update and delete the entities data.
+- [x] User Authorization inorder for only admin user to create ,update and delete the entities data.
 - [x] Basic  search feature inrder for the user to find any information he/she is looking for and for the admin user to check if a particular information is currently being displayed on the webpage as intdented or no.
+- [x] Responsive Design
 
 ## Desktop Webpage layout width 1200px 
 
@@ -16,7 +17,7 @@
 
 ![WebPage Screenshots](/Passion_Project_Application/Content/Images/Screenshots/add.png)
 
-![WebPage Screenshots](/Passion_Project_Application/Content/Images/Screenshots/add.png)
+![WebPage Screenshots](/Passion_Project_Application/Content/Images/Screenshots/details.png)
 
 ![WebPage Screenshots](/Passion_Project_Application/Content/Images/Screenshots/update.png)
 
