@@ -207,6 +207,14 @@
     <Compile Include="Migrations\202106070142399_aircraft.Designer.cs">
       <DependentUpon>202106070142399_aircraft.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202106181530360_aircraft-pic.cs" />
+    <Compile Include="Migrations\202106181530360_aircraft-pic.Designer.cs">
+      <DependentUpon>202106181530360_aircraft-pic.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202106240226172_manufactrerPic.cs" />
+    <Compile Include="Migrations\202106240226172_manufactrerPic.Designer.cs">
+      <DependentUpon>202106240226172_manufactrerPic.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Aircraft.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -247,6 +255,12 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\Screenshots\add.png" />
+    <Content Include="Content\Images\Screenshots\delete.png" />
+    <Content Include="Content\Images\Screenshots\details.png" />
+    <Content Include="Content\Images\Screenshots\home.png" />
+    <Content Include="Content\Images\Screenshots\list.png" />
+    <Content Include="Content\Images\Screenshots\update.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -322,6 +336,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Images\Aircrafts\" />
+    <Folder Include="Content\Images\Manufacturers\" />
+    <Folder Include="Content\video\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -363,6 +380,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202106070142399_aircraft.resx">
       <DependentUpon>202106070142399_aircraft.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106181530360_aircraft-pic.resx">
+      <DependentUpon>202106181530360_aircraft-pic.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202106240226172_manufactrerPic.resx">
+      <DependentUpon>202106240226172_manufactrerPic.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

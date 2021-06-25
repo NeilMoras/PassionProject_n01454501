@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Edit";
 }
-<a href="/Country/Details/@Model.CountryID">Go back</a>
+<div class="back-link"><a href="/Country/Details/@Model.CountryID">Go back</a></div>
 <h2>Update Country</h2>
 <form action="/Country/Update/@Model.CountryID" method="POST">
     <div style="display:none;">
@@ -11,18 +11,21 @@
     </div>
     <div>
         <label>Country Name:</label>
-        <input type="text" name="CountryName" value="@Model.CountryName" />
+        <input type="text" name="CountryName" value="@Model.CountryName" /><span>Current Country Name: @Model.CountryName</span>
     </div>
     <div>
         <label>Airforce Name:</label>
-        <input type="text" name="AirforceName" value="@Model.AirforceName" />
+        <input type="text" name="AirforceName" value="@Model.AirforceName" /><span>Current Airforce Name: @Model.AirforceName</span>
     </div>
     <div>
-        <label>Country Description:</label>
+        <label>Country Airforce Description:</label>
         <textarea name="CountryDescription">@Model.CountryDescription</textarea>
+        
+       
     </div>
+    <div> <span>Current Country Airforce Description: @Model.CountryDescription</span></div>
     <div>
-        <input type="submit" value="Update Country" />
+        <input class="btn btn-primary" type="submit" value="Update Country" />
 
     </div>
 </form>

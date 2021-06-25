@@ -3,25 +3,57 @@
     ViewBag.Title = "View";
 }
 
-<a href="/Manufacturer/List">Go back to list</a>
+<nav class="back-up-del-nav">
+    <ul>
+        <li><a href="/Manufacturer/List">Go back to list</a> </li>
+        <li><a href="/Manufacturer/Edit/@Model.SelectedManufacturer.ManufacturerID">Update</a></li>
+        <li><a class="delete-tag" href="/Manufacturer/DeleteConfirm/@Model.SelectedManufacturer.ManufacturerID">Delete</a></li>
+    </ul>
+</nav>
 
-<a href="/Manufacturer/Edit/@Model.SelectedManufacturer.ManufacturerID">Update</a>
 
-<a class="delete-tag" href="/Manufacturer/DeleteConfirm/@Model.SelectedManufacturer.ManufacturerID">Delete</a>
+
+
+
 
 
 <h2>@Model.SelectedManufacturer.CompanyName</h2>
-<div><span>Company Name:</span> @Model.SelectedManufacturer.CompanyName</div>
-<div><span>Coountry :</span> @Model.SelectedManufacturer.Country</div>
-<div><span>HeadQauters:</span>@Model.SelectedManufacturer.HeadQuarters</div>
-<div><span>Company Description :</span>@Model.SelectedManufacturer.CompanyDescription</div>
 
-
-<div style="margin-top:100px;">
-    <h3>Aircrafts manufacturered by @Model.SelectedManufacturer.CompanyName</h3>
-    @foreach (var aircraft in Model.RelatedAircrafts)
-    {
-        <a href="/Aircraft/Details/@aircraft.AircraftID">@aircraft.AircraftName</a>
-
+    @{
+        string imageurl = "/Content/Images/Manufacturers/Default.jpg";
+        if (Model.SelectedManufacturer.ManufacturerHasPic)
+        {
+            imageurl = "/Content/Images/Manufacturers/" + Model.SelectedManufacturer.ManufacturerID + "." + Model.SelectedManufacturer.ManufacturerPicExtension;
+        }
     }
-</div>
+    <div class="">
+        <div><img class="detail-img" alt="image of @Model.SelectedManufacturer.CompanyName" src="@imageurl" /></div>
+        <table>
+            <tr>
+                <th>Company Name:</th>
+                <td> @Model.SelectedManufacturer.CompanyName</td>
+            </tr>
+            <tr>
+                <th>Coountry:</th>
+                <td>@Model.SelectedManufacturer.Country</td>
+            </tr>
+            <tr>
+                <th>HeadQauters:</th>
+                <td>@Model.SelectedManufacturer.HeadQuarters</td>
+            </tr>
+            <tr>
+                <th>Company Description: </th>
+                <td>@Model.SelectedManufacturer.CompanyDescription</td>
+            </tr>
+        </table>
+
+
+
+        <div class="relation-div aircraft-relationship" style="margin-top:100px;">
+            <h3>Aircrafts manufactured by @Model.SelectedManufacturer.CompanyName</h3>
+            @foreach (var aircraft in Model.RelatedAircrafts)
+            {
+                <div class="relation-list"><a href="/Aircraft/Details/@aircraft.AircraftID">@aircraft.AircraftName</a></div>
+
+            }
+        </div>

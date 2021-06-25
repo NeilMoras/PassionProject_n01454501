@@ -161,6 +161,7 @@ namespace Passion_Project_Application.Controllers
 
         [ResponseType(typeof(void))]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult UpdateCountry(int id, Country Country)
         {
             if (!ModelState.IsValid)
@@ -211,6 +212,7 @@ namespace Passion_Project_Application.Controllers
         
         [ResponseType(typeof(Country))]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult AddCountry(Country country)
         {
             if (!ModelState.IsValid)
@@ -240,6 +242,7 @@ namespace Passion_Project_Application.Controllers
         
         [ResponseType(typeof(Country))]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult DeleteCountry(int id)
         {
             Country country = db.Countries.Find(id);

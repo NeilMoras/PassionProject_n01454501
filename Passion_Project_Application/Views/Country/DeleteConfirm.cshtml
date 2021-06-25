@@ -2,10 +2,8 @@
 @{
     ViewBag.Title = "DeleteConfirm";
 }
+<div class="back-link"><a href="/Country/List">Cancel</a></div>
 
-<h2>DeleteConfirm</h2>
-
-<a href="/Country/List">Cancel</a>
 <h2>Are you sure you want to delete this Country?</h2>
 <p style="color:red">This action cannot be undone</p>
 <h2>@Model.CountryName</h2>
@@ -13,5 +11,5 @@
 <div><span>Country Description:</span>@Model.CountryDescription</div>
 
 <form action="/Country/Delete/@Model.CountryID" method="POST">
-    <input type="submit" value="Confirm Delete" />
+    <input style="margin:5em 0;" class="btn btn-danger" type="submit" value="Confirm Delete" />
 </form>

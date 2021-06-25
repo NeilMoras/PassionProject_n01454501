@@ -4,14 +4,36 @@
     ViewBag.Title = "List";
 }
 
+<div class="list-heading">
+    <h2> Aircrafts</h2>
+   
+</div>
+<div class="new-anchor-div">
+    <a class="new-anchor" href="/Aircraft/New">New Aircraft</a>
+</div>
+<div>
+    <form method="get" action="/Aircraft/List">
+        <input id="search" name="search" type="text" value="" />
+        <input class="btn btn-primary" type="submit" value="search" />
+    </form>
+</div>
 
-<h2>List</h2>
-<a href="/Aircraft/New">New Aircraft</a>
+<div class="list-flex-container">
+    @foreach (var aircraft in Model)
+    {
+        string imageurl = "/Content/Images/Aircrafts/Default.png";
+        if (aircraft.AircraftHasPic)
+        {
 
-@foreach (var aircraft in Model)
-{
-    <h2><a href="/Aircraft/Details/@aircraft.AircraftID">@aircraft.AircraftName</a></h2>
-    
+            imageurl = "/Content/Images/Aircrafts/" + @aircraft.AircraftID + "." + @aircraft.PicExtension;
+
+        }
+
+        <div class="aircraft-list-div">
+            <a href="/Aircraft/Details/@aircraft.AircraftID"><img class="list-img" alt="image of @aircraft.AircraftName" src="@imageurl" /></a>
+            <h2 style="font-size:1.5em; font-weight:bold;"><a href="/Aircraft/Details/@aircraft.AircraftID">@aircraft.AircraftName</a></h2>
+        </div>
 
 
-}
+    }
+</div>

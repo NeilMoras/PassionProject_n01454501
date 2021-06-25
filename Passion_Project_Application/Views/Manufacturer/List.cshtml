@@ -4,14 +4,23 @@
     ViewBag.Title = "List";
 }
 
-
-<h2>List</h2>
-<a href="/Manufacturer/New">New Manufacturer</a>
+<div class="list-heading">
+    <h2> Fighter Jet Manufacturers</h2>
+</div>
+<div class="new-anchor-div">
+    <a href="/Manufacturer/New">New Manufacturer</a>
+</div>
+<div>
+    <form method="get" action="/Manufacturer/List">
+        <input id="search" name="search" type="text" value="" />
+        <input class="btn btn-primary" type="submit" value="search" />
+    </form>
+</div>
 
 @foreach (var manufacturer in Model)
-{
-    <h2><a href="/Manufacturer/Details/@manufacturer.ManufacturerID">@manufacturer.CompanyName</a></h2>
-
+{    <div class="list-head">
+    <h3><a href="/Manufacturer/Details/@manufacturer.ManufacturerID">@manufacturer.CompanyName</a></h3>
+     </div>
 
 
 }

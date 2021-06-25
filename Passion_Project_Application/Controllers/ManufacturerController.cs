@@ -18,12 +18,47 @@ namespace Passion_Project_Application.Controllers
 
         static ManufacturerController()
         {
-            client = new HttpClient();
+
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                AllowAutoRedirect = false,
+                //cookies are manually set in RequestHeader
+                UseCookies = false
+            };
+
+            client = new HttpClient(handler);
             client.BaseAddress = new Uri("https://localhost:44384/api/");
         }
-        
+
+
+        /// <summary>
+        /// Authentication cookie is grabbed which was sent to the controller
+        /// Provides 
+        /// </summary>
+        private void GetApplicationCookie()
+        {
+            string token = "";
+            //HTTP client is set up to be reused, otherwise it will exhaust server resources.
+            //This is a bit dangerous because a previously authenticated cookie could be cached for
+            //a follow-up request from someone else. Reset cookies in HTTP client before grabbing a new one.
+            client.DefaultRequestHeaders.Remove("Cookie");
+            if (!User.Identity.IsAuthenticated) return;
+
+            HttpCookie cookie = System.Web.HttpContext.Current.Request.Cookies.Get(".AspNet.ApplicationCookie");
+            if (cookie != null) token = cookie.Value;
+
+            //collect token as it is submitted to the controller
+            //use it to pass along to the WebAPI.
+            Debug.WriteLine("Token Submitted is : " + token);
+            if (token != "") client.DefaultRequestHeaders.Add("Cookie", ".AspNet.ApplicationCookie=" + token);
+
+            return;
+        }
+
+
+
         // GET: Manufacturer/List
-        public ActionResult List()
+        public ActionResult List(string search)
 
         {
             //objective: communicate with our Manufacturer data api to retrieve a list fo Manufacturers
@@ -32,15 +67,22 @@ namespace Passion_Project_Application.Controllers
             string url = "manufacturerdata/listmanufacturers";
             HttpResponseMessage response = client.GetAsync(url).Result;
 
+            if (response.IsSuccessStatusCode)
+            {
 
-            //Debug.WriteLine("The response code is ");
-            //Debug.WriteLine(response.StatusCode);
 
-            IEnumerable<ManufacturerDto> Manufacturers = response.Content.ReadAsAsync<IEnumerable<ManufacturerDto>>().Result;
-            //Debug.WriteLine("Number of Manufacturer received : ");
-            //Debug.WriteLine(Manufactrer.Count());
-
-            return View(Manufacturers);
+                IEnumerable<ManufacturerDto> SelectedManufacturer = response.Content.ReadAsAsync<IEnumerable<ManufacturerDto>>().Result;
+                return View(search == null ? SelectedManufacturer :
+                    SelectedManufacturer.Where(x => x.CompanyName.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
+                //Debug.WriteLine("The response code is ");
+                //Debug.WriteLine(response.StatusCode);
+                //Debug.WriteLine("Number of Manufacturer received : ");
+                //Debug.WriteLine(Manufactrer.Count());
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
         }
 
         // GET: Manufacturer/Details/5
@@ -87,8 +129,10 @@ namespace Passion_Project_Application.Controllers
 
         // POST: Manufacturer/Create
         [HttpPost]
+        [Authorize]
         public ActionResult Create(Manufacturer manufacturer)
         {
+            GetApplicationCookie();//get token credentials
             Debug.WriteLine("the json payload is :");
             //Debug.WriteLine(Manufacturer.CompanyName);
             //objective: add a new Manufacturer into our system using the API
@@ -115,6 +159,7 @@ namespace Passion_Project_Application.Controllers
         }
 
         // GET: Manufacturer/Edit/5
+        [Authorize]
         public ActionResult Edit(int id)
         {
 
@@ -126,16 +171,32 @@ namespace Passion_Project_Application.Controllers
 
         // POST: Manufacturer/Update/5
         [HttpPost]
-        public ActionResult Update(int id, Manufacturer Manufacturer)
+        [Authorize]
+        public ActionResult Update(int id, Manufacturer Manufacturer , HttpPostedFileBase ManufacturerPic)
         {
+            GetApplicationCookie();//get token credentials
             string url = "manufacturerdata/updatemanufacturer/" + id;
             string jsonpayload = jss.Serialize(Manufacturer);
             HttpContent content = new StringContent(jsonpayload);
             content.Headers.ContentType.MediaType = "application/json";
             HttpResponseMessage response = client.PostAsync(url, content).Result;
             Debug.WriteLine(content);
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode && ManufacturerPic !=null)
             {
+                //Send over image data for Manufacturer
+                url = "ManufacturerData/UploadManufacturerPic/" + id;
+                //Debug.WriteLine("Received ManufacturerPicture "+ManufacturerPic.FileName);
+
+                MultipartFormDataContent requestcontent = new MultipartFormDataContent();
+                HttpContent imagecontent = new StreamContent(ManufacturerPic.InputStream);
+                requestcontent.Add(imagecontent, "ManufacturerPic", ManufacturerPic.FileName);
+                response = client.PostAsync(url, requestcontent).Result;
+                return RedirectToAction("List");
+               
+            }
+            else if (response.IsSuccessStatusCode)
+            {
+                //No image upload, but update still successful
                 return RedirectToAction("List");
             }
             else
@@ -145,6 +206,7 @@ namespace Passion_Project_Application.Controllers
         }
 
         // GET: Manufacturer/DeleteConfirm/5
+        [Authorize]
         public ActionResult DeleteConfirm(int id)
         {
             string url = "manufacturerdata/findmanufacturer/" + id;
@@ -155,8 +217,10 @@ namespace Passion_Project_Application.Controllers
 
         // POST: Manufacturer/Delete/5
         [HttpPost]
+        [Authorize]
         public ActionResult Delete(int id)
         {
+            GetApplicationCookie();//get token credentials
             string url = "manufacturerdata/deletemanufacturer/" + id;
             HttpContent content = new StringContent("");
             content.Headers.ContentType.MediaType = "application/json";

@@ -19,6 +19,9 @@ namespace Passion_Project_Application.Models
 
         public string CompanyDescription { get; set; }
 
+        public bool ManufacturerHasPic { get; set; }
+        public string ManufacturerPicExtension { get; set; }
+
 
     }
     public class ManufacturerDto
@@ -32,6 +35,9 @@ namespace Passion_Project_Application.Models
         public string HeadQuarters { get; set; }
 
         public string CompanyDescription { get; set; }
+
+        public bool ManufacturerHasPic { get; set; }
+        public string ManufacturerPicExtension { get; set; }
 
     }
 }

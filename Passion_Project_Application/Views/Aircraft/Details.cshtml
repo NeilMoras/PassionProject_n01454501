@@ -2,41 +2,82 @@
 @{
     ViewBag.Title = "View";
 }
-<a href="/Aircraft/List">Go back to list</a>
-
-<a href="/Aircraft/Edit/@Model.SelectedAircraft.AircraftID">Update</a>
-
-<a class="delete-tag" href="/Aircraft/DeleteConfirm/@Model.SelectedAircraft.AircraftID">Delete</a>
+<nav class="back-up-del-nav">
+  <ul>
+     <li><a href="/Aircraft/List">Go back to list</a></li>
+     <li><a href="/Aircraft/Edit/@Model.SelectedAircraft.AircraftID">Update</a></li>
+     <li><a class="delete-tag" href="/Aircraft/DeleteConfirm/@Model.SelectedAircraft.AircraftID">Delete</a></li>
+  </ul>
+</nav>
 
 
 <h2>@Model.SelectedAircraft.AircraftName</h2>
-<div><span>Year Introduced:</span>@Model.SelectedAircraft.YearIntroduced.ToString("yyyy").</div>
-<div><span>Aircraft Type:</span>@Model.SelectedAircraft.AircraftType</div>
-<div><span>Engine:</span>@Model.SelectedAircraft.Engine</div>
-<div><span>Range:</span>@Model.SelectedAircraft.Range Kms</div>
-<div><span>Max Speed:</span>@Model.SelectedAircraft.MaxSpeed km/hr</div>
-<div><span>Fun Facts:</span>@Model.SelectedAircraft.Description</div>
-<div><span>Manufacturer:</span><a href="/Manufacturer/Details/@Model.SelectedAircraft.ManufacturerID">@Model.SelectedAircraft.CompanyName</a></div>
-
 <div>
-    <h2>Countries Who own and  operate @Model.SelectedAircraft.AircraftName:</h2>
-    @foreach (var country in Model.ResponsibleCountries)
-    {
-    
-        <a href="/Country/Details/@country.CountryID">@country.CountryName</a><a style="color:#ab2020;" href="/Aircraft/Unassociate/@Model.SelectedAircraft.AircraftID?CountryID=@country.CountryID">[x]</a><br />
+    @{
+        string imageurl = "/Content/Images/Aircrafts/Default.jpg";
+        if (Model.SelectedAircraft.AircraftHasPic)
+        {
+            imageurl = "/Content/Images/Aircrafts/" + Model.SelectedAircraft.AircraftID + "." + Model.SelectedAircraft.PicExtension;
+        }
     }
+    <div class="detail-container">
+        <div><img class="detail-img"  alt="image of @Model.SelectedAircraft.AircraftName" src="@imageurl" /></div>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Year Introduced:</th>
+                        <td>@Model.SelectedAircraft.YearIntroduced.ToString("yyyy")</td>
+                    </tr>
+                    <tr>
+                        <th>Aircraft Type:</th>
+                        <td>@Model.SelectedAircraft.AircraftType</td>
+                    </tr>
+                    <tr>
+                        <th>Engine:</th>
+                        <td>@Model.SelectedAircraft.Engine</td>
+                    </tr>
+                    <tr>
+                        <th>Range:</th>
+                        <td>@Model.SelectedAircraft.Range Kms</td>
+                    </tr>
+                    <tr>
+                        <th>Max Speed:</th>
+                        <td>@Model.SelectedAircraft.MaxSpeed km/hr</td>
+                    </tr>
+                    <tr>
+                        <th>Fun Facts:</th>
+                        <td>@Model.SelectedAircraft.Description</td>
 
-    <div>
-        <h4>Add new Country who own and operates @Model.SelectedAircraft.AircraftName</h4>
-        <form method="POST" action="/Aircraft/Associate/@Model.SelectedAircraft.AircraftID">
-            <select name="CountryID">
-                @foreach (var country in Model.AvailableCountries)
-                {
-                <option value="@country.CountryID">@country.CountryName</option>
-                }
+                    </tr>
+                    <tr class="manufacturer-in-aircraft-detail">
+                        <th>Manufacturer:</th>
+                        <td><a href="/Manufacturer/Details/@Model.SelectedAircraft.ManufacturerID">@Model.SelectedAircraft.CompanyName</a></td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="relation-div aircraft-relationship">
+        <h2>Countries who own and  operate @Model.SelectedAircraft.AircraftName:</h2>
+        @foreach (var country in Model.ResponsibleCountries)
+        {
 
-            </select>
-            <input type="submit" value="Associate Country" />
-        </form>
+    <div class="relation-list"><a href="/Country/Details/@country.CountryID">@country.CountryName</a><a style="color:#ab2020;" href="/Aircraft/Unassociate/@Model.SelectedAircraft.AircraftID?CountryID=@country.CountryID">[x]</a></div>
+        }
+
+        <div>
+            <h4>Add new Country who own and operates @Model.SelectedAircraft.AircraftName</h4>
+            <form method="POST" action="/Aircraft/Associate/@Model.SelectedAircraft.AircraftID">
+                <select class="form-select" name="CountryID">
+                    @foreach (var country in Model.AvailableCountries)
+                    {
+                        <option value="@country.CountryID">@country.CountryName</option>
+                    }
+
+                </select>
+                <input class="btn btn-primary" type="submit" value="Associate Country" />
+            </form>
+        </div>
     </div>
 </div>

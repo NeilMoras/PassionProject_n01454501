@@ -1,12 +1,22 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #e6f3f8;
+    color: #dfdfe5;
+    font-family: 'Acme', sans-serif;
+    letter-spacing: 0.1em;
+    background-image: url("../Content/Images/background-image.jpg")
+    
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    padding-bottom: 10em;
+    font-family: 'Roboto', sans-serif;
+    max-width:1200px;
+   
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -17,22 +27,335 @@
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
+/* FORM */
 input,
 select,
 textarea {
     max-width: 280px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 0.2em;
+    margin:0.5em;
+    color:#000;
 }
 
 label{
     font-weight: bolder;
     width: 150px;
+    margin:0.5em;
 }
 
-span{
-    font-weight:bold;
+a:hover{
+    transform:scale(1.2);
 }
 
+.back-link {
+    margin:2em;
+
+}
+
+.back-link a{
+    text-decoration:none;
+    font-size:1.2em;
+    
+}
+
+.back-link a:hover{
+    color:#87ceeb;
+}
+
+
+
+
+/* BUTTONS */
 .delete-tag {
   color:#ab2020; 
   float:right;
 }
+
+.new-anchor-div {
+    
+   
+    margin-top: 3em;
+    display: inline-block;
+}
+
+    .new-anchor-div a {
+        font-size: 1.2em;
+        text-decoration: none;
+        border: 3px solid #0078EF;
+        padding: 0.2em;
+        border-radius: 5px;
+        background:#fff;
+        color:#333;
+        margin-left:10em;
+    }
+
+    .new-anchor-div a:hover {
+        color: #fff;
+        background-color: #0078EF;
+        
+    }
+/* LIST PAGE */
+.list-img {
+    height: 150px;
+    width: 100%;
+    opacity: 1;
+    position:relative;
+}
+
+
+
+
+.list-flex-container {
+ display:flex;
+ flex-flow:row wrap;
+ 
+     
+  
+ 
+}
+
+
+
+
+.manufacturer-in-aircraft-detail {
+    background-color: white;
+    padding: 1em;
+    color: #333;
+    font-size: 1.2em;
+    border-radius: 5px;
+    opacity: 0.8;
+}
+
+.manufacturer-in-aircraft-detail:hover{
+    opacity:1;
+}
+
+    .manufacturer-in-aircraft-detail a{
+        text-decoration:none;
+        color:#333;
+    }
+    .manufacturer-in-aircraft-detail a:hover{
+        color:blue;
+        text-decoration:underline;
+    }
+
+    .aircraft-list-div {
+        width: 175px;
+        min-height: 100%;
+        display: inline-block;
+        background-color: #86c5d8;
+        border-radius: 5px;
+        margin: 1em;
+        padding: 0.5em;
+        opacity: 0.8;
+        z-index: 999;
+        box-shadow: 0 8px 6px -6px black;
+    }
+
+.relation-list a{
+    font-size:1.5em;
+}
+.aircraft-list-div:hover {
+    transform: scale(1.1);
+    opacity: 1;
+    background-color: #3393ff;
+    
+
+
+
+}
+    .aircraft-list-div a {
+        text-decoration: none;
+        color: #00162B;
+    }
+
+
+
+
+        
+
+    .aircraft-list-div a:hover{
+
+    }
+    .list-heading{
+        display:inline-block
+    }
+
+    .list-heading h2{
+        padding-top: 1em;
+        display:block;
+    }
+
+
+/* DETAILS PAGE */
+.back-up-del-nav ul{
+    list-style:none;
+    display:flex;
+    justify-content:space-evenly;
+    margin-top:2em;
+}
+
+.relation-div{
+    color:#000;
+    border-radius:10px;
+}
+
+
+.detail-img {
+    -moz-box-shadow: inset 0 0 10px #fff;
+    -webkit-box-shadow: inset 0 0 10px #fff;
+    box-shadow: inset 0 0 10px #fff;
+    display: block;
+    width: 30%;
+    margin: 1em 0;
+    padding: 0.5em;
+}
+
+
+.form-select{
+    width:200px;
+}
+
+
+
+/* HOME PAGE */
+#myVideo {
+    object-fit: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -999;
+}
+
+.main-div{
+    background-color:#dcf0ef;
+    opacity: 0.8;
+    text-align:center;
+    margin-top: 5em;
+    height:500px;
+    padding:2em;
+    position:relative;
+    color:#000;
+}
+.main-div h1{
+    opacity:1;
+}
+
+
+.reference{
+    margin-top:1em;
+    color:#333;
+}
+
+
+.list-link {
+    margin: 5em 2em;
+    position: relative;
+    top: 100px;
+    font-size: 1.5em;
+    text-decoration: none;
+    background-color: #C8E4FF;
+    padding: 1em;
+    border-radius: 100%;
+    color: #333;
+    box-shadow: 0 8px 6px -6px black;
+}
+
+.navbar {
+    background-color:#23395d;
+    
+}
+
+.navbar-nav {
+    color: #fff;
+}
+
+th,td{
+    padding: 0.5em;
+}
+
+.list-heading h2{
+    font-size:2em;
+}
+
+
+.aircraft-relationship {
+    background-color: #dcf0ef;
+    padding: 2em;
+    margin-top: 2em;
+    border: 1px solid black;
+    -moz-box-shadow: inset 0 0 10px #000000;
+    -webkit-box-shadow: inset 0 0 10px #000000;
+    box-shadow: inset 0 0 10px #000000;
+}
+
+.button-form  {
+    background-color: #blue;
+}
+
+.pic-upload{
+    color:#fff;
+    margin-top:1em;
+    
+}
+
+           
+/* Media QUERY */
+@media screen and (max-width:991px) {
+    .list-link {
+        display: block;
+        margin: 1em 2em;
+    }
+}
+
+    @media screen and (max-width:991px) {
+        .list-link {
+            display: block;
+            margin: 1em 2em;
+        }
+
+
+        .main-div {
+            height: 800px;
+            
+        }
+    }
+
+    @media screen and (max-width:583px) {
+        .detail-img {
+            width: 100%;
+        }
+
+        span {
+            display: block;
+        }
+    }
+
+
+    @media screen and (max-width:435px) {
+        .aircraft-list-div {
+            margin: 1em auto;
+        }
+    }
+
+
+    @media screen and (max-width:341px) {
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.5em;
+        }
+    }
+
+
+    @media screen and (max-width:376px) {
+        .list-link {
+            font-size: 1.5em;
+        }
+    }

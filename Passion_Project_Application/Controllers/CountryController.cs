@@ -18,31 +18,78 @@ namespace Passion_Project_Application.Controllers
 
         static CountryController()
         {
-            client = new HttpClient();
+            HttpClientHandler handler = new HttpClientHandler()
+            {
+                AllowAutoRedirect = false,
+                //cookies are manually set in RequestHeader
+                UseCookies = false
+            };
+
+            client = new HttpClient(handler);
             client.BaseAddress = new Uri("https://localhost:44384/api/");
         }
+
+
+        /// <summary>
+        /// Authentication cookie is grabbed which was sent to the controller
+        /// Provides 
+        /// </summary>
+        private void GetApplicationCookie()
+        {
+            string token = "";
+            //HTTP client is set up to be reused, otherwise it will exhaust server resources.
+            //This is a bit dangerous because a previously authenticated cookie could be cached for
+            //a follow-up request from someone else. Reset cookies in HTTP client before grabbing a new one.
+            client.DefaultRequestHeaders.Remove("Cookie");
+            if (!User.Identity.IsAuthenticated) return;
+
+            HttpCookie cookie = System.Web.HttpContext.Current.Request.Cookies.Get(".AspNet.ApplicationCookie");
+            if (cookie != null) token = cookie.Value;
+
+            //collect token as it is submitted to the controller
+            //use it to pass along to the WebAPI.
+            Debug.WriteLine("Token Submitted is : " + token);
+            if (token != "") client.DefaultRequestHeaders.Add("Cookie", ".AspNet.ApplicationCookie=" + token);
+
+            return;
+        }
+
         // GET: Country/List
         [HttpGet]
-        public ActionResult List()
+        public ActionResult List(string search)
         {
-                    //objective: communicate with our Country data api to retrieve a list fo Countries
-                    //curl https://localhost:44384/api/countrydata/ListCountries
+            //objective: communicate with our Country data api to retrieve a list fo Countries
+            //curl https://localhost:44384/api/countrydata/ListCountries
 
-                    string url = "countrydata/listcountries";
-                    HttpResponseMessage response = client.GetAsync(url).Result;
+            string url = "countrydata/listcountries";
+            HttpResponseMessage response = client.GetAsync(url).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
 
 
-                    //Debug.WriteLine("The response code is ");
-                    //Debug.WriteLine(response.StatusCode);
+                IEnumerable<CountryDto> SelectedCountry = response.Content.ReadAsAsync<IEnumerable<CountryDto>>().Result;
+                return View(search == null ? SelectedCountry :
+                    SelectedCountry.Where(x => x.CountryName.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0).ToList());
+                //Debug.WriteLine("The response code is ");
+                //Debug.WriteLine(response.StatusCode);
 
-                    IEnumerable<CountryDto> Countries = response.Content.ReadAsAsync<IEnumerable<CountryDto>>().Result;
-                    //Debug.WriteLine("Number of Countries received : ");
-                    //Debug.WriteLine(Country.Count());
 
-                    return View(Countries);
-            
+                //Debug.WriteLine("Number of Countries received : ");
+                //Debug.WriteLine(Country.Count());
 
+                // return View(Countries);
+            }
+            else
+            {
+                return RedirectToAction("Error");
+            }
         }
+    
+
+    
+
+        
 
         // GET: Country/Details/5
         [HttpGet]
@@ -83,6 +130,7 @@ namespace Passion_Project_Application.Controllers
 
         // GET: Country/New
         [HttpGet]
+        [Authorize]
         public ActionResult New()
         {
             return View();
@@ -90,8 +138,11 @@ namespace Passion_Project_Application.Controllers
 
         // POST: Country/Create
         [HttpPost]
+        [Authorize]
         public ActionResult Create(Country country)
         {
+
+            GetApplicationCookie();//get token credentials
             Debug.WriteLine("the json payload is :");
             //Debug.WriteLine(Country.CompanyName);
             //objective: add a new Manufacturer into our system using the API
@@ -118,8 +169,10 @@ namespace Passion_Project_Application.Controllers
 
         // GET: Country/Edit/5
         [HttpGet]
+        [Authorize]
         public ActionResult Edit(int id)
         {
+           
             string url = "countrydata/findcountry/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
             CountryDto selectedCountry = response.Content.ReadAsAsync<CountryDto>().Result;
@@ -128,8 +181,10 @@ namespace Passion_Project_Application.Controllers
 
         // POST: Country/Update/5
         [HttpPost]
+        [Authorize]
         public ActionResult Update(int id, Country Country)
         {
+            GetApplicationCookie();//get token credentials
             string url = "countrydata/updatecountry/" + id;
             string jsonpayload = jss.Serialize(Country);
             HttpContent content = new StringContent(jsonpayload);
@@ -149,6 +204,7 @@ namespace Passion_Project_Application.Controllers
         }
 
         // GET: Country/DeleteConfirm/5
+        [Authorize]
         public ActionResult DeleteConfirm(int id)
         {
             string url = "countrydata/findcountry/" + id;
@@ -159,8 +215,10 @@ namespace Passion_Project_Application.Controllers
 
         // POST: Country/Delete/5
         [HttpPost]
+        [Authorize]
         public ActionResult Delete(int id)
         {
+            GetApplicationCookie();//get token credentials
             string url = "countrydata/deletecountry/" + id;
             HttpContent content = new StringContent("");
             content.Headers.ContentType.MediaType = "application/json";

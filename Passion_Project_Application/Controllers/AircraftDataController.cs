@@ -10,6 +10,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Passion_Project_Application.Models;
 using System.Diagnostics;
+using System.Web;
+using System.IO;
 
 namespace Passion_Project_Application.Controllers
 {
@@ -45,6 +47,8 @@ namespace Passion_Project_Application.Controllers
                 MaxSpeed = a.MaxSpeed,
                 Range = a.Range,
                 Description = a.Description,
+                AircraftHasPic = a.AircraftHasPic,
+                PicExtension = a.PicExtension,
                 ManufacturerID = a.Manufacturers.ManufacturerID,
                 CompanyName = a.Manufacturers.CompanyName
 
@@ -144,6 +148,7 @@ namespace Passion_Project_Application.Controllers
         /// </example>
         [HttpPost]
         [Route("api/AircraftData/AssociateAircraftWithCountry/{aircraftid}/{countryid}")]
+        [Authorize]
         public IHttpActionResult AssociateAircraftWithCountry(int aircraftid, int countryid)
         {
             
@@ -182,6 +187,7 @@ namespace Passion_Project_Application.Controllers
         /// </example>
         [HttpPost]
         [Route("api/AircraftData/UnAssociateAircraftWithCountry/{aircraftid}/{countryid}")]
+        [Authorize]
         public IHttpActionResult UnAssociateAircraftWithCountry(int aircraftid, int countryid)
         {
 
@@ -233,6 +239,8 @@ namespace Passion_Project_Application.Controllers
                 Range = Aircraft.Range,
                 Engine = Aircraft.Engine,
                 Description = Aircraft.Description,
+                AircraftHasPic = Aircraft.AircraftHasPic,
+                PicExtension = Aircraft.PicExtension,
                 ManufacturerID = Aircraft.Manufacturers.ManufacturerID,
                 CompanyName = Aircraft.Manufacturers.CompanyName
             };
@@ -262,6 +270,7 @@ namespace Passion_Project_Application.Controllers
         /// </example>
         [ResponseType(typeof(void))]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult UpdateAircraft(int id, Aircraft aircraft)
         { 
             if (!ModelState.IsValid)
@@ -276,6 +285,9 @@ namespace Passion_Project_Application.Controllers
             }
 
             db.Entry(aircraft).State = EntityState.Modified;
+            // Picture update is handled by another method
+            db.Entry(aircraft).Property(a => a.AircraftHasPic).IsModified = false;
+            db.Entry(aircraft).Property(a => a.PicExtension).IsModified = false;
 
             try
             {
@@ -295,6 +307,93 @@ namespace Passion_Project_Application.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+
+
+        /// <summary>
+        /// Receives Aircraft picture data, uploads it to the webserver and updates the Aircraft's HasPic option
+        /// </summary>
+        /// <param name="id">the aircraft id</param>
+        /// <returns>status code 200 if successful.</returns>
+        /// <example>
+        /// curl -F aircraftpic=@file.jpg "https://localhost:xx/api/aircraftdata/uploadaircraftpic/2"
+        /// POST: api/aircraftData/UpdateaircraftPic/3
+        /// HEADER: enctype=multipart/form-data
+        /// FORM-DATA: image
+        /// </example>
+
+        [HttpPost]
+        public IHttpActionResult UploadAircraftPic(int id)
+        {
+
+            bool haspic = false;
+            string picextension;
+            if (Request.Content.IsMimeMultipartContent())
+            {
+                Debug.WriteLine("Received multipart form data.");
+
+                int numfiles = HttpContext.Current.Request.Files.Count;
+                Debug.WriteLine("Files Received: " + numfiles);
+
+                //Check if a file is posted
+                if (numfiles == 1 && HttpContext.Current.Request.Files[0] != null)
+                {
+                    var aircraftPic = HttpContext.Current.Request.Files[0];
+                    //Check if the file is empty
+                    if (aircraftPic.ContentLength > 0)
+                    {
+                        //establish valid file types (can be changed to other file extensions if desired!)
+                        var valtypes = new[] { "jpeg", "jpg", "png", "gif" };
+                        var extension = Path.GetExtension(aircraftPic.FileName).Substring(1);
+                        //Check the extension of the file
+                        if (valtypes.Contains(extension))
+                        {
+                            try
+                            {
+                                //file name is the id of the image
+                                string fn = id + "." + extension;
+
+                                //get a direct file path to ~/Content/aircrafts/{id}.{extension}
+                                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Content/Images/Aircrafts/"), fn);
+
+                                //save the file
+                                aircraftPic.SaveAs(path);
+
+                                //if these are all successful then we can set these fields
+                                haspic = true;
+                                picextension = extension;
+
+                                //Update the animal haspic and picextension fields in the database
+                                Aircraft Selectedaircraft = db.Aircrafts.Find(id);
+                                Selectedaircraft.AircraftHasPic = haspic;
+                                Selectedaircraft.PicExtension = extension;
+                                db.Entry(Selectedaircraft).State = EntityState.Modified;
+
+                                db.SaveChanges();
+
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine("Aircraft Image was not saved successfully.");
+                                Debug.WriteLine("Exception:" + ex);
+                                return BadRequest();
+                            }
+                        }
+                    }
+
+                }
+
+                return Ok();
+            }
+            else
+            {
+                //not multipart form data
+                return BadRequest();
+
+            }
+
+        }
+
+
         /// <summary>
         /// Adds an aircraft to the system
         /// </summary>
@@ -311,6 +410,7 @@ namespace Passion_Project_Application.Controllers
         /// </example>
         [ResponseType(typeof(Aircraft))]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult AddAircraft(Aircraft aircraft)
         {
             if (!ModelState.IsValid)
@@ -339,12 +439,23 @@ namespace Passion_Project_Application.Controllers
         /// </example>
         [ResponseType(typeof(Aircraft))]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult DeleteAircraft(int id)
         {
             Aircraft aircraft = db.Aircrafts.Find(id);
             if (aircraft == null)
             {
                 return NotFound();
+            }
+            if (aircraft.AircraftHasPic && aircraft.PicExtension != "")
+            {
+                //also delete image from path
+                string path = HttpContext.Current.Server.MapPath("~/Content/Images/Aircrafts/" + id + "." + aircraft.PicExtension);
+                if (System.IO.File.Exists(path))
+                {
+                    Debug.WriteLine("File exists... preparing to delete!");
+                    System.IO.File.Delete(path);
+                }
             }
 
             db.Aircrafts.Remove(aircraft);

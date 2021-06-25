@@ -2,31 +2,34 @@
 @{
     ViewBag.Title = "Edit";
 }
-<a href="/Manufacturer/Details/@Model.ManufacturerID">Go back</a>
+<div class="back-link"><a href="/Manufacturer/Details/@Model.ManufacturerID">Go back</a></div>
 <h2>Update Manufacturer</h2>
-<form action="/Manufacturer/Update/@Model.ManufacturerID" method="POST">
+<form action="/Manufacturer/Update/@Model.ManufacturerID" method="POST" enctype="multipart/form-data">
     <div style="display:none;">
 
         <input type="text" name="ManufacturerID" value="@Model.ManufacturerID" />
     </div>
     <div>
-        <label>Company Name:</label>
-        <input type="text" name="CompanyName" value="@Model.CompanyName" />
+        <label>Manufacturer Name:</label>
+        <input type="text" name="CompanyName" value="@Model.CompanyName" /><span>Current Manufacturer Name: @Model.CompanyName</span>
     </div>
     <div>
         <label>Country:</label>
-        <input type="text" name="Country" value="@Model.Country" />
+        <input type="text" name="Country" value="@Model.Country" /><span>Current Country Name: @Model.Country</span>
     </div>
     <div>
         <label>HeadQuarters:</label>
-        <input type="text" name="HeadQuarters" value="@Model.HeadQuarters" />
+        <input type="text" name="HeadQuarters" value="@Model.HeadQuarters" /><span>Current Headquarters: @Model.HeadQuarters</span>
     </div>
     <div>
         <label>Company Description:</label>
-        <textarea name="CompanyDescription">@Model.CompanyDescription</textarea>
+        <textarea name="CompanyDescription">@Model.CompanyDescription</textarea><span>Current Company Description: @Model.CompanyDescription</span>
     </div>
-    <div>
-        <input type="submit" value="Update Manufacturer" />
+    <div class="col-md-6 col-sm-12">
+        <input  class="pic-upload" type="file" name="ManufacturerPic" />
+    </div>
+    <div class="btn">
+        <input class="btn btn-primary" type="submit" value="Update Manufacturer" />
 
     </div>
 </form>

@@ -2,37 +2,39 @@
 @{
     ViewBag.Title = "Edit";
 }
-<a href="/Aircraft/Details/@Model.SelectedAircraft.AircraftID">Go back</a>
+
+<div class="back-link"><a href="/Aircraft/Details/@Model.SelectedAircraft.AircraftID">Go back</a></div>
 <h2>Update Aircraft</h2>
-<form action="/Aircraft/Update/@Model.SelectedAircraft.AircraftID" method="post">
+<form action="/Aircraft/Update/@Model.SelectedAircraft.AircraftID" method="post" enctype="multipart/form-data">
     <div style="display:none;">
-      
+
         <input type="text" name="AircraftID" value="@Model.SelectedAircraft.AircraftID" />
     </div>
     <div>
         <label>Aircraft Name:</label>
-        <input type="text" name="AircraftName"  value="@Model.SelectedAircraft.AircraftName"/>
+        <input type="text" name="AircraftName" value="@Model.SelectedAircraft.AircraftName" /><span>Current Name:@Model.SelectedAircraft.AircraftName</span>
     </div>
     <div>
         <label>AircraftType:</label>
-        <input type="text" name="AircraftType" value="@Model.SelectedAircraft.AircraftType" />
+        <input type="text" name="AircraftType" value="@Model.SelectedAircraft.AircraftType" /><span>Current Aircraft Type:@Model.SelectedAircraft.AircraftType</span>
     </div>
     <div>
         <label>Year Introduced:</label>
-        <input type="date" name="YearIntroduced" value="@Model.SelectedAircraft.YearIntroduced"/><span>@Model.SelectedAircraft.YearIntroduced.ToString("yyyy/mm/dd")</span>
+        <input type="text" name="YearIntroduced" value="@Model.SelectedAircraft.YearIntroduced.ToString("yyyy-mm-dd")" /><span>Current Year:@Model.SelectedAircraft.YearIntroduced.ToString("yyyy-mm-dd")</span>
     </div>
     <div>
         <label>Max Speed(km/h):</label>
-        <input type="number" name="MaxSpeed" value="@Model.SelectedAircraft.MaxSpeed" />
+        <input type="number" name="MaxSpeed" value="@Model.SelectedAircraft.MaxSpeed" /><span>Current Max Speed:@Model.SelectedAircraft.MaxSpeed (km/h)</span>
     </div>
     <div>
         <label>Range(km):</label>
-        <input type="number" name="Range"  value="@Model.SelectedAircraft.Range"/>
+        <input type="number" name="Range" value="@Model.SelectedAircraft.Range" /><span>Current Range:@Model.SelectedAircraft.Range (km)</span>
     </div>
     <div>
         <label>Engine:</label>
-        <input type="text" name="Engine" value="@Model.SelectedAircraft.Engine" />
+        <input type="text" name="Engine" value="@Model.SelectedAircraft.Engine" /><span>Current Engine:@Model.SelectedAircraft.Engine</span>
     </div>
+
     <div>
         <label>ManufacturerId:</label>
         <select name="ManufacturerID">
@@ -50,10 +52,14 @@
     </div>
     <div>
         <label>Description:</label>
-        <textarea name="Description" >@Model.SelectedAircraft.Description</textarea>
+        <textarea name="Description">@Model.SelectedAircraft.Description</textarea>
+    </div>
+    <div><span>Current Description:@Model.SelectedAircraft.Description</span></div>
+    <div class=" col-md-6 col-sm-12">
+        <input class="pic-upload" type="file" name="AircraftPic" />
     </div>
     <div>
-        <input type="submit" value="Update Aircraft" />
+        <input class="btn btn-primary" type="submit" value="Update Aircraft" />
     </div>
 </form>
 

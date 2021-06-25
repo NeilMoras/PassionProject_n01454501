@@ -4,7 +4,7 @@
 }
 
 
-<a href="/Aircraft/List">Go back to list</a>
+<div class="back-link"><a href="/Aircraft/List">Go back to list</a></div>
 <h2>Add New Aircraft</h2>
 <form action="/Aircraft/Create" method="post">
     <div>
@@ -17,7 +17,7 @@
     </div>
     <div>
         <label>Year Introduced:</label>
-        <input type="date" name="YearIntroduced" />
+        <input type="text" name="YearIntroduced" placeholder="YYYY-MM-DD" /><span>"YYYY-MM-DD"</span>
     </div>
     <div>
         <label>Max Speed(km/h):</label>
@@ -44,7 +44,7 @@
         <label>Description:</label>
         <textarea name="Description"></textarea>
     </div>
-    <div>
-        <input type="submit" value="Add Aircraft" />
+    <div class="btn">
+        <input class="btn btn-primary" type="submit" value="Add Aircraft" />
     </div>
 </form>

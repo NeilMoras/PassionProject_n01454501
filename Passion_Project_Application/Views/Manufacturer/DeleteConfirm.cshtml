@@ -3,9 +3,9 @@
     ViewBag.Title = "DeleteConfirm";
 }
 
-<h2>DeleteConfirm</h2>
 
-<a href="/Manufacturer/List">Cancel</a>
+
+<div class="back-link"><a href="/Manufacturer/List">Cancel</a></div>
 <h2>Are you sure you want to delete this Manufacturer?</h2>
 <h2>@Model.CompanyName</h2>
 <div>Company Name: @Model.CompanyName</div>
@@ -14,6 +14,6 @@
 <div>Company Description :@Model.CompanyDescription</div>
 
 <form action="/Manufacturer/Delete/@Model.ManufacturerID" method="POST">
-    <input type="submit" value="Confirm Delete" />
+    <input style="margin:5em 0;" class="btn btn-danger" type="submit" value="Confirm Delete" />
 
 </form>

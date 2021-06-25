@@ -2,21 +2,32 @@
 @{
     ViewBag.Title = "Details";
 }
-<a href="/Country/List">Go back to list</a>
-
-<a href="/Country/Edit/@Model.SelectedCountry.CountryID">Update</a>
-
-<a style="color:#ab2020;" href="/Country/DeleteConfirm/@Model.SelectedCountry.CountryID">Delete</a>
-
+<nav class="back-up-del-nav">
+   <ul><li><a href="/Country/List">Go back to list</a></li>
+       <li> <a href="/Country/Edit/@Model.SelectedCountry.CountryID">Update</a></li>
+       <li> <a style="color:#ab2020;" href="/Country/DeleteConfirm/@Model.SelectedCountry.CountryID">Delete</a></li>
+       </ul> 
+     
+</nav>
 <h2>@Model.SelectedCountry.CountryName</h2>
-<div>AirForce Name: @Model.SelectedCountry.AirforceName</div>
-<div>Country Description :@Model.SelectedCountry.CountryDescription</div>
+<table>
+    <tr>
+        <th>AirForce Name:</th>
+        <td>@Model.SelectedCountry.AirforceName</td>
+    </tr>
+    <tr>
+        <th>Country Airforce Description: </th>
+        <td>@Model.SelectedCountry.CountryDescription</td>
+    </tr>
+   
+</table>
 
-<div>
+
+<div  class="relation-div aircraft-relationship" >
     <h3>Aircrafts Operated:</h3>
     @foreach (var aircraft in Model.KeptAircrafts)
     {
-        <a href="/Aircraft/Details/@aircraft.AircraftID">@aircraft.AircraftName</a><br />
+       <div class="relation-list"><a class="relation-list" href="/Aircraft/Details/@aircraft.AircraftID">@aircraft.AircraftName</a></div>
 
     }
 </div>

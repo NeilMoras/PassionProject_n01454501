@@ -10,6 +10,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Passion_Project_Application.Models;
 using System.Diagnostics;
+using System.Web;
+using System.IO;
 
 namespace Passion_Project_Application.Controllers
 {
@@ -39,8 +41,10 @@ namespace Passion_Project_Application.Controllers
                 ManufacturerID = s.ManufacturerID,
                 CompanyName = s.CompanyName,
                 Country = s.Country,
-                HeadQuarters = s.HeadQuarters,
-                CompanyDescription = s.CompanyDescription
+                 HeadQuarters = s.HeadQuarters,
+                CompanyDescription = s.CompanyDescription,
+                ManufacturerHasPic = s.ManufacturerHasPic,
+                ManufacturerPicExtension = s.ManufacturerPicExtension
             }));
             return Ok(ManufacturerDtos);
         }
@@ -67,7 +71,9 @@ namespace Passion_Project_Application.Controllers
                 CompanyName = Manufacturer.CompanyName,
                 Country = Manufacturer.Country,
                 HeadQuarters = Manufacturer.HeadQuarters,
-                CompanyDescription = Manufacturer.CompanyDescription
+                CompanyDescription = Manufacturer.CompanyDescription,
+                ManufacturerHasPic = Manufacturer.ManufacturerHasPic,
+                ManufacturerPicExtension = Manufacturer.ManufacturerPicExtension
             };
             if (Manufacturer == null)
             {
@@ -96,6 +102,7 @@ namespace Passion_Project_Application.Controllers
           ///  
         [ResponseType(typeof(void))]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult UpdateManufacturer(int id, Manufacturer Manufacturer)
         {
             if (!ModelState.IsValid)
@@ -109,6 +116,9 @@ namespace Passion_Project_Application.Controllers
             }
 
             db.Entry(Manufacturer).State = EntityState.Modified;
+            // Picture update is handled by another method
+            db.Entry(Manufacturer).Property(a => a.ManufacturerHasPic).IsModified = false;
+            db.Entry(Manufacturer).Property(a => a.ManufacturerPicExtension).IsModified = false;
 
             try
             {
@@ -130,6 +140,90 @@ namespace Passion_Project_Application.Controllers
         }
 
         /// <summary>
+        /// Receives Manufacturer picture data, uploads it to the webserver and updates the Manufacturer's HasPic option
+        /// </summary>
+        /// <param name="id">themanufacturer id</param>
+        /// <returns>status code 200 if successful.</returns>
+        /// <example>
+        /// curl -F manufactuerpic=@file.jpg "https://localhost:xx/api/manufacturerdata/uploadmanufacturerpic/2"
+        /// POST: api/manufacturerData/UpdatemanufacturerPic/3
+        /// HEADER: enctype=multipart/form-data
+        /// FORM-DATA: image
+        /// </example>
+
+        [HttpPost]
+        public IHttpActionResult UploadManufacturerPic(int id)
+        {
+
+            bool haspic = false;
+            string picextension;
+            if (Request.Content.IsMimeMultipartContent())
+            {
+                Debug.WriteLine("Received multipart form data.");
+
+                int numfiles = HttpContext.Current.Request.Files.Count;
+                Debug.WriteLine("Files Received: " + numfiles);
+
+                //Check if a file is posted
+                if (numfiles == 1 && HttpContext.Current.Request.Files[0] != null)
+                {
+                    var manufacturerPic = HttpContext.Current.Request.Files[0];
+                    //Check if the file is empty
+                    if (manufacturerPic.ContentLength > 0)
+                    {
+                        //establish valid file types (can be changed to other file extensions if desired!)
+                        var valtypes = new[] { "jpeg", "jpg", "png", "gif" };
+                        var extension = Path.GetExtension(manufacturerPic.FileName).Substring(1);
+                        //Check the extension of the file
+                        if (valtypes.Contains(extension))
+                        {
+                            try
+                            {
+                                //file name is the id of the image
+                                string fn = id + "." + extension;
+
+                                //get a direct file path to ~/Content/aircrafts/{id}.{extension}
+                                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/Content/Images/Manufacturers/"), fn);
+
+                                //save the file
+                                manufacturerPic.SaveAs(path);
+
+                                //if these are all successful then we can set these fields
+                                haspic = true;
+                                picextension = extension;
+
+                                //Update the animal haspic and picextension fields in the database
+                                Manufacturer SelectedManufacturer = db.Manufacturers.Find(id);
+                                SelectedManufacturer.ManufacturerHasPic = haspic;
+                                SelectedManufacturer.ManufacturerPicExtension = extension;
+                                db.Entry(SelectedManufacturer).State = EntityState.Modified;
+
+                                db.SaveChanges();
+
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine("Manufacturer Image was not saved successfully.");
+                                Debug.WriteLine("Exception:" + ex);
+                                return BadRequest();
+                            }
+                        }
+                    }
+
+                }
+
+                return Ok();
+            }
+            else
+            {
+                //not multipart form data
+                return BadRequest();
+
+            }
+
+        }
+
+        /// <summary>
         /// Adds a Manufacturer to the system
         /// </summary>
         /// <param name="Manufacturer"> JSON FORM DATA of the manufacturer</param>
@@ -145,6 +239,7 @@ namespace Passion_Project_Application.Controllers
 
         [ResponseType(typeof(Manufacturer))]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult AddManufacturer(Manufacturer Manufacturer)
         {
             if (!ModelState.IsValid)
@@ -175,12 +270,23 @@ namespace Passion_Project_Application.Controllers
 
         [ResponseType(typeof(Manufacturer))]
         [HttpPost]
+        [Authorize]
         public IHttpActionResult DeleteManufacturer(int id)
         {
             Manufacturer Manufacturer = db.Manufacturers.Find(id);
             if (Manufacturer == null)
             {
                 return NotFound();
+            }
+            if (Manufacturer.ManufacturerHasPic && Manufacturer.ManufacturerPicExtension != "")
+            {
+                //also delete image from path
+                string path = HttpContext.Current.Server.MapPath("~/Content/Images/Manufacturers/" + id + "." + Manufacturer.ManufacturerPicExtension);
+                if (System.IO.File.Exists(path))
+                {
+                    Debug.WriteLine("File exists... preparing to delete!");
+                    System.IO.File.Delete(path);
+                }
             }
 
             db.Manufacturers.Remove(Manufacturer);
